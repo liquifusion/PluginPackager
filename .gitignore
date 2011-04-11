@@ -1,0 +1,16 @@
+config/**/settings.cfm
+config/settings.cfm
+controllers/Scribble.cfc
+db/sql
+files/uploads
+javascripts/core.js
+log
+plugins/**/*
+stylesheets/core.css
+views/scribble
+WEB-INF
+wheels/tests
+.DS_Store
+.settings
+.project
+settings.xml
