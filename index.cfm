@@ -6,7 +6,7 @@
 <cfinclude template="functions.cfm">
 
 <cfset pluginPackager = {}>
-<cfset pluginPackager.version = "1.0">
+<cfset pluginPackager.version = "1.0.2">
 <cfset pluginPackager.pluginDirectories = listPluginDirectories()>
 
 <!--- Form processing --->
