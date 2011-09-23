@@ -6,7 +6,7 @@
 <cfinclude template="functions.cfm">
 
 <cfset pluginPackager = {}>
-<cfset pluginPackager.version = "1.0.2">
+<cfset pluginPackager.version = "1.0.3">
 <cfset pluginPackager.pluginDirectories = listPluginDirectories()>
 
 <!--- Form processing --->
@@ -16,7 +16,7 @@
 	and StructKeyExists(form, "pluginVersion")
 	and Len(form.pluginVersion)
 >
-	<cfset newPluginFile = packagePlugin(form.pluginFolder, form.pluginVersion, pluginPackager.pluginDirectories)>
+	<cfset newPluginFile = packagePlugin(form.pluginFolder, form.pluginVersion)>
 	<cfset pluginPackager.successMessage = "The plugin was created successully at <kbd>#newPluginFile#</kbd>.">
 	<!--- If user requested the file download too --->
 	<cfif form.pluginDownload>
