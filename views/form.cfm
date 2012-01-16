@@ -1,4 +1,7 @@
-﻿<cfinclude template="../stylesheets/style.cfm">
+<cfparam name="form.pluginVersion" type="string" default="">
+<cfparam name="form.pluginFolder" type="string" default="">
+
+<cfinclude template="../stylesheets/style.cfm">
 
 <cfoutput>
 
@@ -26,13 +29,15 @@
 			<select id="plugin-folder" name="pluginFolder">
 				<option value="">-- Select one --</option>
 				<cfloop query="pluginPackager.pluginDirectories">
-					<option value="#pluginPackager.pluginDirectories.Name#">#pluginPackager.pluginDirectories.Name#</option>
+					<option value="#pluginPackager.pluginDirectories.Name#"
+						<cfif form.pluginFolder IS pluginPackager.pluginDirectories.Name>selected="selected"</cfif>
+						>#pluginPackager.pluginDirectories.Name#</option>
 				</cfloop>
 			</select>
 		</p>
 		<p>
 			<label for="plugin-version">Plugin Version (for example, <kbd>1.0</kbd>)</label><br />
-			<input id="plugin-version" type="text" name="pluginVersion" value="" />
+			<input id="plugin-version" type="text" name="pluginVersion" value="#form.pluginVersion#" style="width: 75px;" />
 		</p>
 		<!--- Disabling until I can figure out why it generates a corrupted zip file in Railo
 		<p>
