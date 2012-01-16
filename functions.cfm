@@ -1,6 +1,33 @@
+<cffunction name="listFiles" returntype="query" hint="Returns directory query of plugin directories.">
+	<cfargument name="directory" type="string" required="true" hint="Plugin directory to zip.">
+	
+	<cfset var loc = {}>
+
+	<!--- Get a list of directories to put in the zip --->
+	<cfdirectory name="loc.fileFilter"
+		action="list"
+		type="file"
+		directory="#ExpandPath('#application.wheels.pluginPath#/#arguments.directory#')#"
+		recurse="false"
+		listinfo="name"
+	>
+
+	<!--- Filter out the "." files --->
+	<cfquery name="loc.fileFilter" dbtype="query">
+		SELECT
+			*
+		FROM
+			loc.fileFilter
+		WHERE
+			name NOT LIKE '.%'
+	</cfquery>
+	
+	<cfreturn loc.fileFilter>
+</cffunction>
+
 <cffunction name="listPluginDirectories" returntype="query" hint="Returns directory query of plugin directories.">
 	<cfset var loc = {}>
-	<cfdirectory name="loc.pluginDirectories" action="list" type="dir" directory="#expandPath('#application.wheels.pluginPath#/')#">
+	<cfdirectory name="loc.pluginDirectories" action="list" type="dir" directory="#ExpandPath('#application.wheels.pluginPath#/')#">
 	<cfreturn loc.pluginDirectories>
 </cffunction>
 
@@ -8,6 +35,7 @@
 	<cfargument name="directory" type="string" required="true" hint="Plugin directory to zip.">
 	
 	<cfset var loc = {}>
+
 	<!--- get a list of directories to put in the zip --->
 	<cfdirectory name="loc.dirFilter"
 		action="list"
@@ -16,32 +44,18 @@
 		recurse="true"
 		listinfo="name"
 	>
-	<!--- just filter out the MAC & source control crap first --->
+	<!--- Filter out the MAC & source control crap first --->
 	<cfquery name="loc.dirFilter" dbtype="query">
-		SELECT * FROM loc.dirFilter WHERE name NOT LIKE '__MACOSX%' AND name NOT LIKE '.%'
+		SELECT
+			*
+		FROM
+			loc.dirFilter
+		WHERE
+			name NOT LIKE '__MACOSX%'
+			AND name NOT LIKE '.%'
 	</cfquery>
 	
 	<cfreturn loc.dirFilter>
-</cffunction>
-
-<cffunction name="listFiles" returntype="query" hint="Returns directory query of plugin directories.">
-	<cfargument name="directory" type="string" required="true" hint="Plugin directory to zip.">
-	
-	<cfset var loc = {}>
-	<!--- get a list of directories to put in the zip --->
-	<cfdirectory name="loc.fileFilter"
-		action="list"
-		type="file"
-		directory="#ExpandPath('#application.wheels.pluginPath#/#arguments.directory#')#"
-		recurse="false"
-		listinfo="name"
-	>
-	<!--- just filter out the "." files --->
-	<cfquery name="loc.fileFilter" dbtype="query">
-		SELECT * FROM loc.fileFilter WHERE name NOT LIKE '.%'
-	</cfquery>
-	
-	<cfreturn loc.fileFilter>
 </cffunction>
 
 <cffunction name="packagePlugin" returntype="string" hint="Packages a given plugin directory as plugins/PluginName-Version.zip. Returns path to plugin in file system.">
@@ -59,7 +73,7 @@
 		<!--- include files in the root dir --->
 		<cfloop query="loc.fileFilter">
 			<cfzipparam
-				source="#ExpandPath( '#application.wheels.pluginPath#/#arguments.directory#/#loc.fileFilter.name#' )#"
+				source="#ExpandPath('#application.wheels.pluginPath#/#arguments.directory#/#loc.fileFilter.name#')#"
 				recurse="false"
 			>
 		</cfloop>
@@ -83,7 +97,13 @@
 	<cfargument name="directory" type="string" required="true" hint="Name of directory to inspect.">
 
 	<cfset var loc = {}>
-	<cfdirectory name="loc.directory" action="list" type="file" directory="#ExpandPath('#application.wheels.pluginPath#/#arguments.directory#')#">
+
+	<cfdirectory
+		name="loc.directory"
+		action="list"
+		type="file"
+		directory="#ExpandPath('#application.wheels.pluginPath#/#arguments.directory#')#"
+	>
 
 	<cfquery name="loc.cfc" dbtype="query">
 		SELECT
